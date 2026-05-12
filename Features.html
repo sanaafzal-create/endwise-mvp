@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EndWise – Platform Features</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --forest:    #2F4F4F;
+  --forest-lt: #3d6464;
+  --sage:      #C8D5C8;
+  --sage-lt:   #e4ede4;
+  --gold:      #D4B483;
+  --gold-dk:   #b8964e;
+  --cream:     #F9F7F2;
+  --cream-60:  rgba(249,247,242,0.6);
+  --cream-40:  rgba(249,247,242,0.4);
+  --txt-dark:  #1a2e2e;
+  --txt-mid:   #4a6363;
+  --txt-soft:  #7a9999;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--txt-dark);overflow-x:hidden}
+
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.45}
+
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;line-height:1.15}
+
+/* ══════════ NAV ══════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 5%;
+  background:rgba(249,247,242,0.93);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(47,79,79,0.08);
+  transition:padding .3s,box-shadow .3s;
+}
+.nav-logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;z-index:1}
+.logo-mark{width:36px;height:36px;flex-shrink:0;display:block}
+.logo-mark svg{width:100%;height:100%;display:block}
+.logo-txt{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;color:var(--forest);letter-spacing:.02em}
+.nav-links{display:flex;align-items:center;gap:2.25rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--txt-mid);font-size:.875rem;font-weight:400;letter-spacing:.02em;transition:color .2s}
+.nav-links a:hover{color:var(--forest);font-weight:500}
+.nav-links a.active{color:var(--forest);font-weight:500}
+.btn-nav{background:var(--forest);color:var(--cream);border:none;border-radius:60px;padding:.65rem 1.6rem;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;text-decoration:none;transition:background .25s,transform .2s;display:inline-block}
+.btn-nav:hover{background:var(--forest-lt);transform:translateY(-1px)}
+
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:40px;height:40px;border-radius:10px;border:1.5px solid rgba(47,79,79,.15);background:transparent;cursor:pointer;padding:0;transition:background .2s;z-index:1;flex-shrink:0}
+.hamburger:hover{background:rgba(47,79,79,.06)}
+.hamburger span{display:block;width:16px;height:1.5px;background:var(--forest);border-radius:99px;transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .22s,width .22s;transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;width:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* Mobile overlay */
+.mobile-menu{position:fixed;inset:0;z-index:250;background:rgba(249,247,242,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;opacity:0;transform:translateY(-8px);transition:opacity .3s ease,transform .3s ease}
+.mobile-menu.open{opacity:1;transform:translateY(0);pointer-events:all}
+.mobile-menu-links{list-style:none;display:flex;flex-direction:column;align-items:center;gap:.25rem;margin-bottom:2.5rem}
+.mobile-menu-links a{text-decoration:none;font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,7vw,2.5rem);font-weight:500;color:var(--forest);line-height:1.5;transition:color .2s;letter-spacing:.01em}
+.mobile-menu-links a:hover{color:var(--gold-dk)}
+.mm-divider{width:40px;height:1px;background:rgba(47,79,79,.12);margin:1.5rem 0}
+
+/* ══════════ PAGE HERO ══════════ */
+#hero{
+  background:var(--sage-lt);
+  padding:8rem 5% 4.5rem;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero-eyebrow{font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--txt-mid);margin-bottom:1rem;display:block}
+#hero h1{font-size:clamp(2.6rem,5vw,4rem);font-weight:500;color:var(--txt-dark);line-height:1.1;max-width:600px;margin:0 auto}
+#hero h1 em{font-style:italic;color:var(--forest)}
+
+/* ══════════ FEATURES SECTION ══════════ */
+#features{background:var(--cream);padding:2rem 0 4rem}
+
+.feature-block{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:5rem;
+  max-width:1100px;
+  margin:0 auto;
+  padding:5.5rem 5%;
+  position:relative;
+}
+
+/* alternating separator */
+.feature-block+.feature-block{
+  border-top:1px solid rgba(47,79,79,.07);
+}
+
+/* Reverse: phone left, text right */
+.feature-block.rev .feat-text{order:2}
+.feature-block.rev .phone-col{order:1}
+
+/* ── Text column ── */
+.feat-text{display:flex;flex-direction:column}
+.feat-label{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--txt-soft);margin-bottom:1rem}
+.feat-heading{font-size:clamp(2rem,2.8vw,2.8rem);font-weight:500;color:var(--txt-dark);line-height:1.18;margin-bottom:1.25rem}
+.feat-body{font-size:.97rem;color:var(--txt-mid);line-height:1.85;font-weight:300;margin-bottom:1.75rem;max-width:440px}
+.feat-pills{display:flex;flex-wrap:wrap;gap:.55rem}
+.feat-pill{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(47,79,79,.06);border:1px solid rgba(47,79,79,.1);
+  border-radius:60px;padding:.3rem .75rem;
+  font-size:.76rem;font-weight:500;color:var(--txt-mid);
+}
+.feat-pill::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+/* ── Phone column ── */
+.phone-col{display:flex;justify-content:center;align-items:center}
+
+/* ══════════ PHONE MOCKUP ══════════ */
+.phone-shell{
+  width:285px;
+  background:#0c0c0c;
+  border-radius:52px;
+  padding:9px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.09),
+    0 40px 100px rgba(0,0,0,.18),
+    0 12px 32px rgba(0,0,0,.12),
+    inset 0 1px 0 rgba(255,255,255,.07);
+  position:relative;flex-shrink:0;
+}
+.phone-shell::before{content:'';position:absolute;left:-3px;top:92px;width:3px;height:32px;background:#141414;border-radius:3px 0 0 3px;box-shadow:0 46px 0 #141414,0 84px 0 #141414}
+.phone-shell::after{content:'';position:absolute;right:-3px;top:112px;width:3px;height:64px;background:#141414;border-radius:0 3px 3px 0}
+
+.phone-screen{
+  width:100%;aspect-ratio:267/578;border-radius:44px;
+  overflow:hidden;position:relative;
+  display:flex;flex-direction:column;isolation:isolate;
+}
+
+.di{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:90px;height:26px;background:#0c0c0c;border-radius:20px;z-index:50}
+.sbar{position:absolute;top:0;left:0;right:0;height:48px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 18px 7px;z-index:40;font-family:'DM Sans',sans-serif}
+.sbar-t{font-size:.62rem;font-weight:700}
+.sbar-ic{display:flex;align-items:center;gap:3px}
+.sbar-ic svg{width:11px;height:11px}
+.sbar.lt .sbar-t,.sbar.lt .sbar-ic{color:rgba(249,247,242,.82)}
+.sbar.dk .sbar-t,.sbar.dk .sbar-ic{color:rgba(26,46,46,.78)}
+.hi{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:96px;height:4px;border-radius:99px;z-index:40}
+.hi.on-dk{background:rgba(255,255,255,.22)}
+.hi.on-lt{background:rgba(26,46,46,.14)}
+
+/* in-app bottom nav */
+.abn{position:absolute;bottom:0;left:0;right:0;height:58px;display:flex;align-items:center;justify-content:space-around;padding:0 4px 10px;z-index:40}
+.abn.lbg{background:#fff;border-top:1px solid rgba(0,0,0,.06)}
+.abn.dbg{background:rgba(18,38,38,.97);border-top:1px solid rgba(255,255,255,.07)}
+.abn-i{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border-radius:8px;cursor:pointer}
+.abn-e{font-size:.9rem}
+.abn-l{font-size:.4rem;font-weight:500;color:var(--txt-soft)}
+.abn-i.on .abn-l{color:var(--forest);font-weight:700}
+
+/* ══════════════════════════════════
+   SCREEN 1 – CLOSURE COMPASS
+═══════════════════════════════════ */
+.sc1{position:absolute;inset:0;background:#f8f6f1;display:flex;flex-direction:column;padding:50px 0 58px}
+.sc1-top{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 0}
+.sc1-greet{font-size:.5rem;color:var(--txt-soft);margin-bottom:1px}
+.sc1-title{font-family:'Cormorant Garamond',serif;font-size:.96rem;font-weight:500;color:var(--txt-dark)}
+.sc1-ava{width:26px;height:26px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:var(--forest);flex-shrink:0}
+.sc1-prog{margin:9px 14px 0;background:var(--forest);border-radius:12px;padding:11px 13px}
+.sc1-pl{font-size:.46rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(249,247,242,.52);margin-bottom:2px}
+.sc1-pr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:4px}
+.sc1-pn{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:300;color:var(--cream);line-height:1}
+.sc1-ps{font-size:.44rem;color:rgba(249,247,242,.42)}
+.sc1-track{height:4px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.sc1-fill{height:100%;width:68%;background:var(--gold);border-radius:99px}
+.sc1-sl{font-size:.5rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txt-mid);padding:8px 14px 6px}
+.sc1-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 14px;flex:1}
+.sc1-card{border-radius:11px;padding:9px 9px 7px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;min-height:58px}
+.sc1-card.c-forest{background:var(--forest)}
+.sc1-card.c-gold{background:var(--gold)}
+.sc1-card.c-sage{background:rgba(200,213,200,.55)}
+.sc1-card.c-white{background:#fff;border:1px solid rgba(47,79,79,.1)}
+.sc1-card.c-dim{background:rgba(47,79,79,.08)}
+.sc1-card.c-warm{background:rgba(212,180,131,.18)}
+.sc1-ci{font-size:.85rem;margin-bottom:3px;line-height:1}
+.sc1-cn{font-size:.52rem;font-weight:600;line-height:1.35}
+.sc1-card.c-forest .sc1-cn{color:var(--cream)}
+.sc1-card.c-gold .sc1-cn{color:var(--forest)}
+.sc1-card.c-sage .sc1-cn,.sc1-card.c-white .sc1-cn,.sc1-card.c-dim .sc1-cn,.sc1-card.c-warm .sc1-cn{color:var(--txt-dark)}
+.sc1-badge{display:inline-block;font-size:.4rem;font-weight:600;padding:1.5px 5px;border-radius:99px;margin-top:2px}
+.sc1-card.c-forest .sc1-badge{background:rgba(212,180,131,.2);color:var(--gold)}
+.sc1-card.c-gold .sc1-badge{background:rgba(47,79,79,.14);color:var(--forest)}
+.sc1-card.c-sage .sc1-badge,.sc1-card.c-white .sc1-badge,.sc1-card.c-dim .sc1-badge{background:rgba(47,79,79,.1);color:var(--txt-mid)}
+.sc1-card.c-warm .sc1-badge{background:rgba(212,180,131,.25);color:var(--gold-dk)}
+
+/* ══════════════════════════════════
+   SCREEN 2 – DOCUMENT VAULT
+═══════════════════════════════════ */
+.sc2{position:absolute;inset:0;background:#f8f6f1;display:flex;flex-direction:column;padding:50px 0 58px}
+.sc2-topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 12px;border-bottom:1px solid rgba(47,79,79,.07)}
+.sc2-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500;color:var(--txt-dark)}
+.sc2-upload-btn{font-size:.52rem;font-weight:600;color:var(--forest);background:rgba(47,79,79,.08);border:none;border-radius:20px;padding:5px 9px;cursor:pointer}
+
+.sc2-section-lbl{font-size:.5rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-soft);padding:10px 16px 5px}
+
+.sc2-doc-list{padding:0 14px;display:flex;flex-direction:column;gap:6px}
+.sc2-doc{display:flex;align-items:center;gap:9px;background:#fff;border-radius:11px;padding:9px 11px;border:1px solid rgba(47,79,79,.07)}
+.sc2-doc-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0}
+.sc2-doc-ico.uploaded{background:rgba(47,79,79,.08)}
+.sc2-doc-ico.pending{background:rgba(212,180,131,.15)}
+.sc2-doc-info{flex:1}
+.sc2-doc-name{font-size:.62rem;font-weight:600;color:var(--txt-dark);margin-bottom:1px}
+.sc2-doc-sub{font-size:.48rem;color:var(--txt-soft)}
+.sc2-doc-status{font-size:.46rem;font-weight:600;padding:2px 6px;border-radius:99px}
+.sc2-doc-status.done{background:rgba(47,79,79,.1);color:var(--forest)}
+.sc2-doc-status.pend{background:rgba(212,180,131,.2);color:var(--gold-dk)}
+
+.sc2-templates-row{padding:8px 14px 0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sc2-tpl{background:rgba(212,180,131,.12);border:1px solid rgba(212,180,131,.2);border-radius:10px;padding:8px 9px;cursor:pointer}
+.sc2-tpl-ico{font-size:.75rem;margin-bottom:3px}
+.sc2-tpl-name{font-size:.5rem;font-weight:600;color:var(--txt-dark);line-height:1.3}
+.sc2-tpl-sub{font-size:.42rem;color:var(--txt-soft);margin-top:1px}
+
+/* ══════════════════════════════════
+   SCREEN 3 – EMOTIONAL SUPPORT
+═══════════════════════════════════ */
+.sc3{position:absolute;inset:0;background:#f8f6f1;display:flex;flex-direction:column;padding:50px 0 58px}
+.sc3-header{padding:10px 16px 12px;border-bottom:1px solid rgba(47,79,79,.07)}
+.sc3-eyebrow{font-size:.44rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:3px;font-weight:600}
+.sc3-title{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:500;color:var(--txt-dark);line-height:1.2}
+.sc3-sub{font-size:.5rem;color:var(--txt-soft);margin-top:3px;line-height:1.5}
+
+.sc3-peace{margin:10px 14px 0;background:var(--forest);border-radius:12px;padding:11px 13px}
+.sc3-peace-lbl{font-size:.44rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:5px;font-weight:600}
+.sc3-peace-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.82rem;color:var(--cream);line-height:1.5}
+.sc3-peace-cite{font-size:.44rem;color:rgba(249,247,242,.45);margin-top:5px;font-style:normal}
+
+.sc3-sl{font-size:.5rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txt-mid);padding:9px 16px 6px}
+
+.sc3-cards{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 14px;flex:1}
+.sc3-card{border-radius:11px;padding:9px;display:flex;flex-direction:column;gap:4px}
+.sc3-card.c-sage{background:rgba(200,213,200,.4)}
+.sc3-card.c-gold{background:rgba(212,180,131,.15);border:1px solid rgba(212,180,131,.2)}
+.sc3-card.c-dim{background:rgba(47,79,79,.07)}
+.sc3-card.c-white{background:#fff;border:1px solid rgba(47,79,79,.08)}
+.sc3-ci{font-size:.85rem;line-height:1}
+.sc3-cn{font-size:.52rem;font-weight:600;color:var(--txt-dark);line-height:1.3}
+.sc3-cs{font-size:.44rem;color:var(--txt-soft);line-height:1.4}
+
+/* ══════════════════════════════════
+   SCREEN 4 – PRE-PLANNING
+═══════════════════════════════════ */
+.sc4{position:absolute;inset:0;background:#f8f6f1;display:flex;flex-direction:column;padding:50px 0 58px}
+.sc4-header{padding:10px 16px 14px;border-bottom:1px solid rgba(47,79,79,.07)}
+.sc4-eyebrow{font-size:.44rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:3px;font-weight:600}
+.sc4-title{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:500;color:var(--txt-dark);line-height:1.2}
+.sc4-sub{font-size:.5rem;color:var(--txt-soft);margin-top:3px;line-height:1.5}
+
+.sc4-sl{font-size:.5rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--txt-mid);padding:9px 16px 6px}
+
+.sc4-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 14px;flex:1}
+.sc4-card{border-radius:11px;padding:9px;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.sc4-card.c-forest{background:var(--forest)}
+.sc4-card.c-gold{background:var(--gold)}
+.sc4-card.c-sage{background:rgba(200,213,200,.5)}
+.sc4-card.c-warm{background:rgba(212,180,131,.18)}
+.sc4-ci{font-size:.85rem;line-height:1}
+.sc4-cn{font-size:.53rem;font-weight:600;line-height:1.3}
+.sc4-card.c-forest .sc4-cn{color:var(--cream)}
+.sc4-card.c-gold .sc4-cn{color:var(--forest)}
+.sc4-card.c-sage .sc4-cn,.sc4-card.c-warm .sc4-cn{color:var(--txt-dark)}
+.sc4-cs{font-size:.43rem;line-height:1.4}
+.sc4-card.c-forest .sc4-cs{color:rgba(249,247,242,.5)}
+.sc4-card.c-gold .sc4-cs{color:rgba(47,79,79,.6)}
+.sc4-card.c-sage .sc4-cs,.sc4-card.c-warm .sc4-cs{color:var(--txt-soft)}
+
+.sc4-access{margin:8px 14px 0;background:rgba(47,79,79,.06);border:1px dashed rgba(47,79,79,.2);border-radius:11px;padding:9px 11px;display:flex;align-items:center;gap:8px}
+.sc4-access-ico{font-size:.9rem;flex-shrink:0}
+.sc4-access-txt .sc4-cn{font-size:.58rem;font-weight:600;color:var(--forest);margin-bottom:1px}
+.sc4-access-txt .sc4-cs{font-size:.46rem;color:var(--txt-soft)}
+
+/* ══════════ WAITLIST ══════════ */
+#waitlist{background:var(--cream);padding:6rem 5%}
+.wl-card{
+  max-width:820px;margin:0 auto;text-align:center;
+  background:var(--forest);border-radius:28px;padding:4.5rem 3rem;
+  position:relative;overflow:hidden;
+}
+.wl-card::before{content:'';position:absolute;width:480px;height:480px;border-radius:50%;background:rgba(212,180,131,.07);top:-200px;right:-100px;pointer-events:none}
+.wl-card::after{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:rgba(200,213,200,.05);bottom:-130px;left:-80px;pointer-events:none}
+.wl-icon{width:52px;height:52px;border-radius:15px;background:rgba(212,180,131,.12);border:1px solid rgba(212,180,131,.22);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 1.4rem;position:relative;z-index:1}
+.wl-card h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,2.8rem);color:var(--cream);margin-bottom:.7rem;position:relative;z-index:1}
+.wl-card p{font-size:.95rem;color:var(--cream-60);max-width:460px;margin:0 auto 2.4rem;line-height:1.8;font-weight:300;position:relative;z-index:1}
+.wl-form{display:flex;gap:.7rem;max-width:440px;margin:0 auto;position:relative;z-index:1;flex-wrap:wrap;justify-content:center}
+.wl-input{flex:1;min-width:210px;background:rgba(249,247,242,.1);border:1px solid rgba(249,247,242,.17);border-radius:60px;padding:.78rem 1.35rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--cream);outline:none;transition:border .2s}
+.wl-input::placeholder{color:rgba(249,247,242,.35)}
+.wl-input:focus{border-color:var(--gold)}
+.btn-gold{background:var(--gold);color:var(--forest);border:none;border-radius:60px;padding:.72rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .25s,transform .2s;text-decoration:none;display:inline-block}
+.btn-gold:hover{background:var(--gold-dk);color:#fff;transform:translateY(-1px)}
+
+/* ══════════ FOOTER ══════════ */
+footer{background:var(--forest);padding:3.5rem 5% 2rem;border-top:1px solid rgba(249,247,242,.06)}
+.footer-row{max-width:1100px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:2rem;border-bottom:1px solid rgba(249,247,242,.1);margin-bottom:1.5rem;flex-wrap:wrap;gap:2rem}
+.footer-brand-area{}
+.footer-brand-row{display:flex;align-items:center;gap:.55rem;margin-bottom:.5rem}
+.footer-brand-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--cream)}
+.footer-tagline{font-size:.78rem;color:rgba(249,247,242,.38);max-width:240px;line-height:1.55}
+.footer-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap;padding-top:.25rem}
+.footer-links a{text-decoration:none;color:rgba(249,247,242,.45);font-size:.82rem;transition:color .2s}
+.footer-links a:hover{color:var(--cream)}
+.footer-bottom{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.footer-bottom p{font-size:.75rem;color:rgba(249,247,242,.28)}
+
+/* ══════════ ANIMATIONS ══════════ */
+.fade-up{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.vis{opacity:1;transform:translateY(0)}
+.fd1{transition-delay:.1s}
+.phone-reveal{opacity:0;transform:translateY(32px) scale(.97);transition:opacity .85s ease,transform .85s ease}
+.phone-reveal.vis{opacity:1;transform:translateY(0) scale(1)}
+
+/* ══════════ RESPONSIVE ══════════ */
+@media(max-width:900px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .btn-nav{display:none}
+
+  .feature-block{
+    grid-template-columns:1fr;
+    gap:2.5rem;
+    padding:4rem 5%;
+    text-align:center;
+  }
+  .feature-block.rev .feat-text{order:1}
+  .feature-block.rev .phone-col{order:2}
+  .feat-body{max-width:100%}
+  .feat-pills{justify-content:center}
+
+  .wl-card{padding:3rem 1.5rem}
+  .wl-form{flex-direction:column;align-items:stretch}
+  .wl-input{min-width:0}
+  .footer-row{flex-direction:column}
+  .footer-links{gap:1.25rem}
+  .footer-bottom{flex-direction:column;gap:.25rem;text-align:center}
+}
+@media(max-width:480px){
+  .phone-shell{width:255px}
+  #hero h1{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ MOBILE OVERLAY ════════ -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-menu-links">
+    <li><a href="endwise-landing.html" onclick="closeMobileMenu()">Home</a></li>
+    <li><a href="endwise-how-it-works.html" onclick="closeMobileMenu()">How it works</a></li>
+    <li><a href="#" onclick="closeMobileMenu()">Platform features</a></li>
+    <li><a href="#" onclick="closeMobileMenu()">About the Mission</a></li>
+    <li><a href="#waitlist" onclick="closeMobileMenu()">Contact</a></li>
+  </ul>
+  <div class="mm-divider"></div>
+  <a href="#waitlist" class="btn-nav" onclick="closeMobileMenu()">Join Waitlist</a>
+</div>
+
+<!-- ════════ NAV ════════ -->
+<nav id="nav">
+  <a class="nav-logo" href="endwise-landing.html">
+    <div class="logo-mark">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="ew-pf-nav"><circle cx="100" cy="100" r="80"/></clipPath></defs>
+        <circle cx="100" cy="100" r="85" fill="none" stroke="#2F4F4F" stroke-width="11"/>
+        <path clip-path="url(#ew-pf-nav)" fill="#2F4F4F" d="M18,160 L18,148 L36,116 L50,130 L65,100 L78,118 L100,44 L122,92 L136,80 L152,106 L182,140 L182,178 L18,178 Z"/>
+        <path clip-path="url(#ew-pf-nav)" fill="#C5D4C2" d="M82,126 C76,134 70,150 76,164 C82,176 108,180 134,172 C150,165 152,153 140,147 C128,140 108,136 96,130 C90,127 84,123 82,126 Z"/>
+      </svg>
+    </div>
+    <span class="logo-txt">EndWise</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="HowItWorks.html">How It Works</a></li>
+    <li><a href="Features.html" class="active">Features</a></li>
+    <li><a href="Mission.html">Our Mission</a></li>
+    <li><a href="Contact.html">Contact</a></li>
+  </ul>
+  <a class="btn-nav" href="#waitlist">Sign Up</a>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ════════ HERO ════════ -->
+<section id="hero">
+  <span class="hero-eyebrow">Seamless process to guide you</span>
+  <h1>Platform <em>Features</em></h1>
+</section>
+
+<!-- ════════ FEATURES ════════ -->
+<section id="features">
+
+  <!-- ─── 1. Closure Compass — text left, phone right ─── -->
+  <div class="feature-block">
+
+    <div class="feat-text fade-up">
+      <div class="feat-label">Closure Compass – Dashboard</div>
+      <h2 class="feat-heading">A personalized path to help you move forward, one step at a time.</h2>
+      <p class="feat-body">The Closure Compass guides you through what needs attention next, based on your unique situation — your location, your family structure, and the estate you're navigating. It breaks complex responsibilities into clear, manageable steps so you're never overwhelmed, never lost. You don't have to do everything today. Just the next right thing.</p>
+      <div class="feat-pills">
+        <span class="feat-pill">Legal tasks</span>
+        <span class="feat-pill">Financial tasks</span>
+        <span class="feat-pill">Funeral &amp; memorial</span>
+        <span class="feat-pill">Progress tracking</span>
+      </div>
+    </div>
+
+    <div class="phone-col">
+      <div class="phone-shell phone-reveal">
+        <div class="phone-screen">
+          <div class="di"></div>
+          <div class="sbar dk"><span class="sbar-t">9:41</span><div class="sbar-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
+
+          <div class="sc1">
+            <div class="sc1-top">
+              <div><div class="sc1-greet">Good morning, Alex</div><div class="sc1-title">Your Closure Compass</div></div>
+              <div class="sc1-ava">A</div>
+            </div>
+            <div class="sc1-prog">
+              <div class="sc1-pl">Overall Progress</div>
+              <div class="sc1-pr"><div class="sc1-pn">68%</div><div class="sc1-ps">12 of 18 tasks done</div></div>
+              <div class="sc1-track"><div class="sc1-fill"></div></div>
+            </div>
+            <div class="sc1-sl">Categories</div>
+            <div class="sc1-grid">
+              <div class="sc1-card c-forest"><div class="sc1-ci">⚖️</div><div><div class="sc1-cn">Legal</div><div class="sc1-badge">3 remaining</div></div></div>
+              <div class="sc1-card c-gold"><div class="sc1-ci">💰</div><div><div class="sc1-cn">Financial</div><div class="sc1-badge">2 remaining</div></div></div>
+              <div class="sc1-card c-sage"><div class="sc1-ci">📋</div><div><div class="sc1-cn">Treatment Docs</div><div class="sc1-badge">Complete</div></div></div>
+              <div class="sc1-card c-white"><div class="sc1-ci">📁</div><div><div class="sc1-cn">Documents</div><div class="sc1-badge">5 uploaded</div></div></div>
+              <div class="sc1-card c-dim"><div class="sc1-ci">🕊️</div><div><div class="sc1-cn">Emotional Care</div><div class="sc1-badge">Ongoing</div></div></div>
+              <div class="sc1-card c-warm"><div class="sc1-ci">🗺️</div><div><div class="sc1-cn">Next Steps</div><div class="sc1-badge">1 upcoming</div></div></div>
+            </div>
+          </div>
+
+          <div class="abn lbg">
+            <div class="abn-i on"><span class="abn-e">🏠</span><span class="abn-l">Home</span></div>
+            <div class="abn-i"><span class="abn-e">🧭</span><span class="abn-l">Compass</span></div>
+            <div class="abn-i"><span class="abn-e">📁</span><span class="abn-l">Vault</span></div>
+            <div class="abn-i"><span class="abn-e">👤</span><span class="abn-l">Profile</span></div>
+          </div>
+          <div class="hi on-lt"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. Document Vault — phone left, text right ─── -->
+  <div class="feature-block rev">
+
+    <div class="feat-text fade-up">
+      <div class="feat-label">Document Vault</div>
+      <h2 class="feat-heading">A secure place to store everything that matters most.</h2>
+      <p class="feat-body">The Document Vault helps you safely store and organize essential records so they're easy to find when you need them — and accessible to the people you trust. Wills, death certificates, power of attorney, property titles — everything in one encrypted, private space. No more searching through boxes or losing critical paperwork.</p>
+      <div class="feat-pills">
+        <span class="feat-pill">Encrypted storage</span>
+        <span class="feat-pill">Document templates</span>
+        <span class="feat-pill">Family access sharing</span>
+        <span class="feat-pill">Smart upload</span>
+      </div>
+    </div>
+
+    <div class="phone-col">
+      <div class="phone-shell phone-reveal">
+        <div class="phone-screen">
+          <div class="di"></div>
+          <div class="sbar dk"><span class="sbar-t">9:41</span><div class="sbar-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
+
+          <div class="sc2">
+            <div class="sc2-topbar">
+              <div class="sc2-title">Document Vault</div>
+              <button class="sc2-upload-btn">+ Upload</button>
+            </div>
+
+            <div class="sc2-section-lbl">Your Documents</div>
+            <div class="sc2-doc-list">
+              <div class="sc2-doc">
+                <div class="sc2-doc-ico uploaded">📄</div>
+                <div class="sc2-doc-info"><div class="sc2-doc-name">Death Certificate</div><div class="sc2-doc-sub">Uploaded · 2 copies</div></div>
+                <div class="sc2-doc-status done">Saved</div>
+              </div>
+              <div class="sc2-doc">
+                <div class="sc2-doc-ico uploaded">📋</div>
+                <div class="sc2-doc-info"><div class="sc2-doc-name">Notarized Will</div><div class="sc2-doc-sub">Uploaded · Last edited 3d ago</div></div>
+                <div class="sc2-doc-status done">Saved</div>
+              </div>
+              <div class="sc2-doc">
+                <div class="sc2-doc-ico pending">📑</div>
+                <div class="sc2-doc-info"><div class="sc2-doc-name">Power of Attorney</div><div class="sc2-doc-sub">Not yet uploaded</div></div>
+                <div class="sc2-doc-status pend">Pending</div>
+              </div>
+              <div class="sc2-doc">
+                <div class="sc2-doc-ico pending">🏠</div>
+                <div class="sc2-doc-info"><div class="sc2-doc-name">Property Titles</div><div class="sc2-doc-sub">Not yet uploaded</div></div>
+                <div class="sc2-doc-status pend">Pending</div>
+              </div>
+            </div>
+
+            <div class="sc2-section-lbl">Templates</div>
+            <div class="sc2-templates-row">
+              <div class="sc2-tpl"><div class="sc2-tpl-ico">✉️</div><div class="sc2-tpl-name">Notification Letter</div><div class="sc2-tpl-sub">Ready to fill</div></div>
+              <div class="sc2-tpl"><div class="sc2-tpl-ico">📝</div><div class="sc2-tpl-name">Obituary Generator</div><div class="sc2-tpl-sub">Guided template</div></div>
+            </div>
+          </div>
+
+          <div class="abn lbg">
+            <div class="abn-i"><span class="abn-e">🏠</span><span class="abn-l">Home</span></div>
+            <div class="abn-i"><span class="abn-e">🧭</span><span class="abn-l">Compass</span></div>
+            <div class="abn-i on"><span class="abn-e">📁</span><span class="abn-l">Vault</span></div>
+            <div class="abn-i"><span class="abn-e">👤</span><span class="abn-l">Profile</span></div>
+          </div>
+          <div class="hi on-lt"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 3. Emotional Support — text left, phone right ─── -->
+  <div class="feature-block">
+
+    <div class="feat-text fade-up">
+      <div class="feat-label">Emotional Support</div>
+      <h2 class="feat-heading">Grief doesn't follow a schedule. You're allowed to pause.</h2>
+      <p class="feat-body">This space is here to support you emotionally — without pressure, without expectations. Whether you want to reflect, remember, or simply take a quiet moment, you can move at your own pace. Write in your grief journal, read today's peace note, or visit the Memory Wall to share a story. There's no right way to grieve. There's only what feels right for you.</p>
+      <div class="feat-pills">
+        <span class="feat-pill">Daily peace notes</span>
+        <span class="feat-pill">Grief journal prompts</span>
+        <span class="feat-pill">Memory wall</span>
+        <span class="feat-pill">Support resources</span>
+      </div>
+    </div>
+
+    <div class="phone-col">
+      <div class="phone-shell phone-reveal">
+        <div class="phone-screen">
+          <div class="di"></div>
+          <div class="sbar dk"><span class="sbar-t">9:41</span><div class="sbar-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
+
+          <div class="sc3">
+            <div class="sc3-header">
+              <div class="sc3-eyebrow">Emotional Support</div>
+              <div class="sc3-title">A Moment for You</div>
+              <div class="sc3-sub">This space moves at your pace. No pressure, no deadlines.</div>
+            </div>
+
+            <div class="sc3-peace">
+              <div class="sc3-peace-lbl">Today's Peace Note</div>
+              <div class="sc3-peace-txt">"You've done enough today. It's okay to pause. The tasks will still be here tomorrow."</div>
+              <div class="sc3-peace-cite">— EndWise Daily Reminder</div>
+            </div>
+
+            <div class="sc3-sl">Your Space</div>
+            <div class="sc3-cards">
+              <div class="sc3-card c-sage">
+                <div class="sc3-ci">🕯️</div>
+                <div class="sc3-cn">Memory Wall</div>
+                <div class="sc3-cs">Share photos &amp; stories</div>
+              </div>
+              <div class="sc3-card c-gold">
+                <div class="sc3-ci">📔</div>
+                <div class="sc3-cn">Grief Journal</div>
+                <div class="sc3-cs">Guided prompts to reflect</div>
+              </div>
+              <div class="sc3-card c-dim">
+                <div class="sc3-ci">🤝</div>
+                <div class="sc3-cn">Support Network</div>
+                <div class="sc3-cs">Connect with counselors</div>
+              </div>
+              <div class="sc3-card c-white">
+                <div class="sc3-ci">🌙</div>
+                <div class="sc3-cn">Cultural Resources</div>
+                <div class="sc3-cs">Traditions &amp; rituals</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="abn lbg">
+            <div class="abn-i"><span class="abn-e">🏠</span><span class="abn-l">Home</span></div>
+            <div class="abn-i"><span class="abn-e">🧭</span><span class="abn-l">Compass</span></div>
+            <div class="abn-i"><span class="abn-e">📁</span><span class="abn-l">Vault</span></div>
+            <div class="abn-i"><span class="abn-e">👤</span><span class="abn-l">Profile</span></div>
+          </div>
+          <div class="hi on-lt"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 4. Pre-Planning — phone left, text right ─── -->
+  <div class="feature-block rev">
+
+    <div class="feat-text fade-up">
+      <div class="feat-label">Pre – Planning</div>
+      <h2 class="feat-heading">Give your family the gift of clarity and peace.</h2>
+      <p class="feat-body">Pre-planning allows you to organize your wishes, documents, and information in advance — so your loved ones never have to face confusion in their most painful moments. Document your burial preferences, write letters to the people you love, and share access with your executor. The greatest act of care you can give is clarity.</p>
+      <div class="feat-pills">
+        <span class="feat-pill">Document my wishes</span>
+        <span class="feat-pill">Letters to loved ones</span>
+        <span class="feat-pill">Executor access</span>
+        <span class="feat-pill">Future planning</span>
+      </div>
+    </div>
+
+    <div class="phone-col">
+      <div class="phone-shell phone-reveal">
+        <div class="phone-screen">
+          <div class="di"></div>
+          <div class="sbar dk"><span class="sbar-t">9:41</span><div class="sbar-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></div></div>
+
+          <div class="sc4">
+            <div class="sc4-header">
+              <div class="sc4-eyebrow">Pre-Planning Mode</div>
+              <div class="sc4-title">Planning Ahead</div>
+              <div class="sc4-sub">Organize your wishes. Give your family clarity when they need it most.</div>
+            </div>
+
+            <div class="sc4-sl">My Planning</div>
+            <div class="sc4-grid">
+              <div class="sc4-card c-forest">
+                <div class="sc4-ci">📄</div>
+                <div class="sc4-cn">My Documents</div>
+                <div class="sc4-cs">Wills, trust &amp; legal</div>
+              </div>
+              <div class="sc4-card c-gold">
+                <div class="sc4-ci">🕊️</div>
+                <div class="sc4-cn">My Wishes</div>
+                <div class="sc4-cs">Burial &amp; service preferences</div>
+              </div>
+              <div class="sc4-card c-sage">
+                <div class="sc4-ci">✉️</div>
+                <div class="sc4-cn">Letters to Loved Ones</div>
+                <div class="sc4-cs">Write now, share later</div>
+              </div>
+              <div class="sc4-card c-warm">
+                <div class="sc4-ci">🎵</div>
+                <div class="sc4-cn">Service Details</div>
+                <div class="sc4-cs">Songs, readings &amp; rituals</div>
+              </div>
+            </div>
+
+            <div class="sc4-access">
+              <div class="sc4-access-ico">🔓</div>
+              <div class="sc4-access-txt">
+                <div class="sc4-cn">Give Access</div>
+                <div class="sc4-cs">Share your plan with your executor or family</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="abn lbg">
+            <div class="abn-i"><span class="abn-e">🏠</span><span class="abn-l">Home</span></div>
+            <div class="abn-i"><span class="abn-e">🧭</span><span class="abn-l">Compass</span></div>
+            <div class="abn-i"><span class="abn-e">📁</span><span class="abn-l">Vault</span></div>
+            <div class="abn-i on"><span class="abn-e">👤</span><span class="abn-l">Profile</span></div>
+          </div>
+          <div class="hi on-lt"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════ WAITLIST ════════ -->
+<section id="waitlist">
+  <div class="wl-card fade-up">
+    <div class="wl-icon">✉️</div>
+    <h2>Join our Waitlist</h2>
+    <p>EndWise helps families navigate what comes next and helps individuals plan ahead with clarity and care. Whether you're planning ahead or supporting someone through loss, EndWise meets you there.</p>
+    <div class="wl-form">
+      <input class="wl-input" type="email" placeholder="Your email address"/>
+      <button class="btn-gold" onclick="this.textContent='You\'re on the list ✓';this.style.background='#3d6464';this.style.color='#f9f7f2'">Get Early Access</button>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <div class="footer-row">
+    <div class="footer-brand-area">
+      <div class="footer-brand-row">
+        <div class="logo-mark">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs><clipPath id="ew-pf-ft"><circle cx="100" cy="100" r="80"/></clipPath></defs>
+            <circle cx="100" cy="100" r="85" fill="none" stroke="#C5D4C2" stroke-width="11"/>
+            <path clip-path="url(#ew-pf-ft)" fill="#C5D4C2" d="M18,160 L18,148 L36,116 L50,130 L65,100 L78,118 L100,44 L122,92 L136,80 L152,106 L182,140 L182,178 L18,178 Z"/>
+            <path clip-path="url(#ew-pf-ft)" fill="rgba(249,247,242,0.55)" d="M82,126 C76,134 70,150 76,164 C82,176 108,180 134,172 C150,165 152,153 140,147 C128,140 108,136 96,130 C90,127 84,123 82,126 Z"/>
+          </svg>
+        </div>
+        <span class="footer-brand-name">EndWise</span>
+      </div>
+      <div class="footer-tagline">A guided end-of-life management platform. Get Early Access.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#waitlist">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 EndWise. All rights reserved.</p>
+    <p>Made with compassion, for every family.</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); }
+    });
+  }, {threshold: 0.1});
+  document.querySelectorAll('.fade-up, .phone-reveal').forEach(el => io.observe(el));
+
+  // Nav shrink
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 60){
+      nav.style.padding = '.75rem 5%';
+      nav.style.boxShadow = '0 4px 20px rgba(47,79,79,.08)';
+    } else {
+      nav.style.padding = '1.1rem 5%';
+      nav.style.boxShadow = 'none';
+    }
+  }, {passive: true});
+
+  // Hamburger
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  function closeMobileMenu(){hamburger.classList.remove('open');mobileMenu.classList.remove('open');document.body.style.overflow=''}
+  hamburger.addEventListener('click', () => {
+    const open = hamburger.classList.contains('open');
+    open ? closeMobileMenu() : (hamburger.classList.add('open'), mobileMenu.classList.add('open'), document.body.style.overflow='hidden');
+  });
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeMobileMenu(); });
+</script>
+</body>
+</html>

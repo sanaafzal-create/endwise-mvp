@@ -102,7 +102,9 @@
     letter-spacing: 0.02em;
     transition: color 0.2s;
   }
-  .nav-links a:hover, .nav-links a.active { color: var(--forest); font-weight: 500; }
+  .nav-links a:hover, .nav-links a.active { color: var(--forest); font-weight: 800; } 
+
+
 
   /* ── HAMBURGER ── */
   .hamburger {
@@ -1899,17 +1901,15 @@
   </div>
 </section>
 
-<!-- ───── CTA ───── -->
-<section id="cta">
-  <div class="container">
-    <div class="cta-box fade-up">
-      <div class="cta-label">Be the First</div>
-      <h2>Be the first to experience EndWise.</h2>
-      <p>Join our waitlist and get early access. Help us build the guide that families deserve.</p>
-      <div class="cta-form">
-        <input class="cta-input" type="email" placeholder="Enter your email address" />
-        <a href="#" class="btn-gold" >Sign Up</a>
-      </div>
+<!-- ───── WAITLIST ───── -->
+<section id="waitlist">
+  <div class="wl-card fade-up">
+    <div class="wl-icon">✉️</div>
+    <h2>Join our Waitlist</h2>
+    <p>EndWise helps families navigate what comes next and helps individuals plan ahead with clarity and care. Whether you're planning ahead or supporting someone through loss, EndWise meets you there.</p>
+    <div class="wl-form">
+      <input class="wl-input" type="email" placeholder="Your email address"/>
+      <button class="btn-gold" onclick="this.textContent='You\'re on the list ✓';this.style.background='#3d6464';this.style.color='#f9f7f2'">Get Early Access</button>
     </div>
   </div>
 </section>
