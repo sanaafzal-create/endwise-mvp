@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EndWise – From Grief to Guidance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Cormorant:ital,wght@1,400;1,500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --forest:   #2F4F4F;
+    --sage:     #C8D5C8;
+    --gold:     #D4B483;
+    --cream:    #F9F7F2;
+    --forest-light: #3d6464;
+    --gold-dark:    #b8964e;
+    --text-dark:    #1a2e2e;
+    --text-mid:     #4a6363;
+    --text-soft:    #7a9999;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; font-weight: 500; line-height: 1.15; }
+  .serif-italic { font-family: 'Cormorant', serif; font-style: italic; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 5%;
+    background: rgba(249, 247, 242, 0.93);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(47, 79, 79, 0.08);
+    transition: padding 0.3s, box-shadow 0.3s;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    z-index: 1;
+  }
+
+  .logo-mark {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .logo-mark svg { width: 100%; height: 100%; display: block; }
+
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--forest);
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-mid);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--forest); font-weight: 500; }
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(47, 79, 79, 0.15);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .hamburger:hover { background: rgba(47, 79, 79, 0.06); }
+  .hamburger span {
+    display: block;
+    width: 16px; height: 1.5px;
+    background: var(--forest);
+    border-radius: 99px;
+    transition: transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.22s, width 0.22s;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* ── MOBILE MENU OVERLAY ── */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    background: rgba(249, 247, 242, 0.98);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .mobile-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  .mobile-menu-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .mobile-menu-links a {
+    text-decoration: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.9rem, 7vw, 2.5rem);
+    font-weight: 500;
+    color: var(--forest);
+    line-height: 1.5;
+    transition: color 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .mobile-menu-links a:hover { color: var(--gold-dark); }
+  .mobile-menu-divider {
+    width: 40px; height: 1px;
+    background: rgba(47, 79, 79, 0.12);
+    margin: 1.5rem 0;
+  }
+
+  .btn-primary {
+    background: var(--forest);
+    color: var(--cream);
+    border: none;
+    border-radius: 60px;
+    padding: 0.65rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { background: var(--forest-light); transform: translateY(-1px); }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--forest);
+    border: none;
+    border-radius: 60px;
+    padding: 0.65rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-gold:hover { background: var(--gold-dark); color: #fff; transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--forest);
+    border: 1.5px solid var(--forest);
+    border-radius: 60px;
+    padding: 0.65rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .btn-outline:hover { background: var(--forest); color: var(--cream); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 5% 5rem;
+    position: relative;
+    overflow: hidden;
+    gap: 4rem;
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    right: -8%;
+    top: -5%;
+    width: 55vw;
+    height: 55vw;
+    max-width: 750px;
+    max-height: 750px;
+    background: var(--forest);
+    border-radius: 50%;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+
+  .hero-bg-leaf {
+    position: absolute;
+    left: 42%;
+    top: 15%;
+    width: 320px;
+    opacity: 0.06;
+    pointer-events: none;
+    transform: rotate(-20deg);
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--gold);
+    border-radius: 60px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 1.5rem;
+    background: rgba(212, 180, 131, 0.08);
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: block;
+  }
+
+  .hero-left h1 {
+    font-size: clamp(2.6rem, 4.5vw, 4rem);
+    line-height: 1.12;
+    color: var(--text-dark);
+    margin-bottom: 1.4rem;
+  }
+
+  .hero-left h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--text-mid);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 2.25rem;
+    font-weight: 300;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .hero-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .avatars {
+    display: flex;
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2.5px solid var(--cream);
+    overflow: hidden;
+    margin-right: -10px;
+    background: var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--forest);
+  }
+
+  .avatar:nth-child(1) { background: #b5c9c0; }
+  .avatar:nth-child(2) { background: #c4d4ba; }
+  .avatar:nth-child(3) { background: #d4c4a8; }
+  .avatar:nth-child(4) { background: #c0c8b8; }
+
+  .social-text { margin-left: 1rem; }
+  .social-text .stars { color: var(--gold); font-size: 0.75rem; letter-spacing: 0.05em; }
+  .social-text p { font-size: 0.78rem; color: var(--text-soft); margin-top: 1px; }
+
+  /* Hero Right – App Card Mockup */
+  .hero-right {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hero-dashboard {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 24px 80px rgba(47, 79, 79, 0.14), 0 4px 16px rgba(47, 79, 79, 0.06);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 2;
+    animation: floatCard 5s ease-in-out infinite;
+  }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+  }
+
+  .dash-greeting { font-size: 0.78rem; color: var(--text-soft); }
+  .dash-greeting strong { display: block; font-size: 1rem; color: var(--text-dark); font-family: 'Cormorant Garamond', serif; font-weight: 600; margin-top: 1px; }
+
+  .dash-avatar-sm {
+    width: 36px; height: 36px;
+    background: var(--sage);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; color: var(--forest);
+  }
+
+  .dash-progress-card {
+    background: var(--forest);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--cream);
+  }
+
+  .dash-progress-label { font-size: 0.7rem; opacity: 0.7; margin-bottom: 0.25rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .dash-progress-pct { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; line-height: 1; }
+  .dash-progress-sub { font-size: 0.72rem; opacity: 0.6; margin-bottom: 0.75rem; }
+
+  .progress-bar-bg {
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 68%;
+    background: var(--gold);
+    border-radius: 99px;
+    animation: growBar 1.8s 0.5s ease-out both;
+  }
+
+  @keyframes growBar { from { width: 0; } to { width: 68%; } }
+
+  .dash-tasks-title { font-size: 0.78rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.65rem; }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid #f0eeea;
+    font-size: 0.8rem;
+    color: var(--text-mid);
+  }
+
+  .task-item:last-child { border-bottom: none; }
+
+  .task-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .task-dot.done { background: var(--forest); }
+  .task-dot.pending { background: var(--gold); }
+  .task-dot.todo { background: var(--sage); }
+
+  .task-item.done-task { text-decoration: line-through; opacity: 0.5; }
+
+  .task-due { margin-left: auto; font-size: 0.7rem; color: var(--text-soft); }
+
+  .floating-pill {
+    position: absolute;
+    background: #fff;
+    border-radius: 50px;
+    padding: 0.5rem 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    box-shadow: 0 8px 24px rgba(47,79,79,0.12);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    white-space: nowrap;
+  }
+
+  .pill-icon {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+  }
+
+  .pill-1 { top: -16px; right: 24px; animation: floatCard 5s 1s ease-in-out infinite; }
+  .pill-1 .pill-icon { background: rgba(212,180,131,0.2); }
+
+  .pill-2 { bottom: 24px; left: -20px; animation: floatCard 5s 2s ease-in-out infinite; }
+  .pill-2 .pill-icon { background: rgba(200,213,200,0.4); }
+
+  /* ── SECTION BASE ── */
+  section { position: relative; }
+
+  .container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 5%;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.2;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+  }
+
+  .section-body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-mid);
+    font-weight: 300;
+    max-width: 560px;
+  }
+
+  /* ── PROBLEM SECTION ── */
+  #problem {
+    background: var(--forest);
+    padding: 6rem 5%;
+    overflow: hidden;
+  }
+
+  .problem-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .problem-left .section-label { color: var(--gold); }
+  .problem-left .section-title { color: var(--cream); font-size: clamp(2rem, 3vw, 2.75rem); }
+  .problem-left .section-body { color: rgba(249,247,242,0.7); max-width: 100%; }
+
+  .problem-quote {
+    font-family: 'Cormorant', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    color: var(--gold);
+    line-height: 1.5;
+    margin-top: 2rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--gold);
+  }
+
+  .problem-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .pain-card {
+    background: rgba(249, 247, 242, 0.06);
+    border: 1px solid rgba(249, 247, 242, 0.1);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: background 0.3s;
+  }
+
+  .pain-card:hover { background: rgba(249,247,242,0.1); }
+
+  .pain-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(212,180,131,0.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+  }
+
+  .pain-card h4 { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--cream); margin-bottom: 0.25rem; }
+  .pain-card p { font-size: 0.82rem; color: rgba(249,247,242,0.55); line-height: 1.6; }
+
+  /* ── FEATURES (4 pillars) ── */
+  #pillars {
+    padding: 6rem 5%;
+    background: var(--cream);
+  }
+
+  .pillars-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .pillar-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(47,79,79,0.07);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .pillar-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(47,79,79,0.1); }
+
+  .pillar-icon-wrap {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+    font-size: 1.3rem;
+  }
+
+  .pillar-icon-wrap.green { background: rgba(200,213,200,0.4); }
+  .pillar-icon-wrap.gold  { background: rgba(212,180,131,0.2); }
+  .pillar-icon-wrap.teal  { background: rgba(47,79,79,0.1); }
+  .pillar-icon-wrap.sage  { background: rgba(200,213,200,0.6); }
+
+  .pillar-card h3 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
+  .pillar-card p  { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
+
+  /* ── HOW IT WORKS ── */
+  #how {
+    background: #f3f1eb;
+    padding: 6rem 5%;
+  }
+
+  .how-header { text-align: center; margin-bottom: 4rem; }
+
+  .steps-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto 3rem;
+    position: relative;
+  }
+
+  .step-connector {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--sage), transparent);
+    margin-top: 2.3rem;
+    max-width: 80px;
+  }
+
+  .step-connector.rev { background: linear-gradient(90deg, transparent, var(--sage)); }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 0 0 auto;
+    width: 160px;
+  }
+
+  .step-num-wrap {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid var(--sage);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .step:hover .step-num-wrap { background: var(--forest); border-color: var(--forest); }
+  .step:hover .step-num-wrap svg { fill: var(--cream); }
+  .step:hover .step-num-wrap .step-icon { color: var(--cream); }
+
+  .step-icon { font-size: 1.25rem; }
+
+  .step-num {
+    position: absolute;
+    top: -8px; right: -8px;
+    width: 20px; height: 20px;
+    background: var(--gold);
+    border-radius: 50%;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--forest);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .step h4 { font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.35rem; }
+  .step p  { font-size: 0.78rem; color: var(--text-soft); line-height: 1.6; }
+
+  .how-cta { text-align: center; }
+
+  /* ── PERSONAS ── */
+  #personas {
+    padding: 6rem 5%;
+    background: var(--cream);
+  }
+
+  .personas-header {
+    max-width: 1160px;
+    margin: 0 auto 3rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .persona-scroll {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .persona-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.75rem 1.4rem;
+    border: 1px solid rgba(47,79,79,0.07);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+
+  .persona-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s;
+  }
+
+  .persona-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(47,79,79,0.1); }
+  .persona-card:hover::before { transform: scaleX(1); }
+
+  .persona-emoji { font-size: 2rem; margin-bottom: 0.85rem; }
+  .persona-card h4 { font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.4rem; }
+  .persona-card p { font-size: 0.8rem; color: var(--text-mid); line-height: 1.65; font-weight: 300; }
+
+  /* extra personas row */
+  .persona-scroll-2 {
+    max-width: 1160px;
+    margin: 1.25rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  /* ── COMPASS FEATURE ── */
+  #compass {
+    padding: 6rem 5%;
+    background: var(--forest);
+    overflow: hidden;
+  }
+
+  .compass-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .compass-left .section-label { color: var(--gold); }
+  .compass-left .section-title { color: var(--cream); }
+  .compass-left .section-body { color: rgba(249,247,242,0.65); }
+
+  .compass-features { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+
+  .cf-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: rgba(249,247,242,0.8);
+    font-size: 0.9rem;
+  }
+
+  .cf-check {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(212,180,131,0.25);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--gold);
+  }
+
+  /* Compass UI Mock */
+  .compass-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .compass-card-ui {
+    background: rgba(249,247,242,0.08);
+    border: 1px solid rgba(249,247,242,0.12);
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
+  }
+
+  .cc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+  }
+
+  .cc-cat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--cream);
+  }
+
+  .cc-cat-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .cc-badge {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 99px;
+    background: rgba(212,180,131,0.2);
+    color: var(--gold);
+  }
+
+  .cc-task {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.8rem;
+    color: rgba(249,247,242,0.65);
+    padding: 0.35rem 0;
+    border-top: 1px solid rgba(249,247,242,0.07);
+  }
+
+  .cc-check-box {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    border: 1px solid rgba(249,247,242,0.25);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    color: var(--gold);
+  }
+
+  .cc-check-box.done { background: var(--gold); border-color: var(--gold); color: var(--forest); }
+
+  /* ── FOUNDER STORY ── */
+  #mission {
+    padding: 7rem 5%;
+    background: var(--cream);
+  }
+
+  .mission-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .mission-image-wrap {
+    position: relative;
+  }
+
+  .mission-image-bg {
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--sage) 0%, var(--forest) 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .mission-image-inner {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(47,79,79,0.85) 0%, transparent 60%);
+  }
+
+  .mission-image-scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scene-svg { width: 70%; opacity: 0.35; }
+
+  .mission-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 2rem;
+    z-index: 2;
+  }
+
+  .mission-caption p {
+    font-family: 'Cormorant', serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--cream);
+    line-height: 1.55;
+  }
+
+  .mission-caption cite { display: block; font-size: 0.78rem; font-style: normal; color: var(--gold); margin-top: 0.5rem; font-family: 'DM Sans', sans-serif; }
+
+  .pullout-stat {
+    position: absolute;
+    top: 1.5rem; right: -1.5rem;
+    background: #fff;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 16px 40px rgba(47,79,79,0.12);
+    text-align: center;
+    min-width: 130px;
+  }
+
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; color: var(--forest); }
+  .stat-label { font-size: 0.72rem; color: var(--text-soft); margin-top: 0.1rem; }
+
+  .mission-right .section-label { color: var(--gold-dark); }
+  .mission-right .section-title { font-size: clamp(2rem, 3vw, 2.6rem); margin-bottom: 1.5rem; }
+  .mission-body { font-size: 0.95rem; color: var(--text-mid); line-height: 1.85; font-weight: 300; margin-bottom: 1rem; }
+
+  .founder-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin: 2rem 0;
+  }
+
+  .fv-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    line-height: 1.55;
+  }
+
+  .fv-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 0.45rem;
+  }
+
+  /* ── EMOTIONAL UX SECTION ── */
+  #emotional {
+    padding: 6rem 5%;
+    background: #f3f1eb;
+  }
+
+  .emotional-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .emotional-header { text-align: center; margin-bottom: 3.5rem; }
+
+  .emotional-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .emotional-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(47,79,79,0.07);
+    transition: transform 0.3s;
+  }
+
+  .emotional-card:hover { transform: translateY(-3px); }
+
+  .emotional-card.wide { grid-column: span 2; display: flex; gap: 2rem; align-items: center; }
+  .emotional-card.tall { grid-row: span 2; display: flex; flex-direction: column; }
+
+  .ec-icon { font-size: 2.25rem; margin-bottom: 1rem; }
+  .emotional-card h3 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem; }
+  .emotional-card p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.75; font-weight: 300; }
+
+  .peace-note {
+    background: var(--forest);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin-top: auto;
+  }
+
+  .peace-note p {
+    font-family: 'Cormorant', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--cream);
+    line-height: 1.6;
+  }
+
+  .peace-note cite { font-style: normal; font-size: 0.72rem; color: var(--gold); font-family: 'DM Sans', sans-serif; display: block; margin-top: 0.5rem; }
+
+  /* ── MARKET / STATS ── */
+  #market {
+    padding: 5rem 5%;
+    background: var(--cream);
+  }
+
+  .market-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .market-left .section-title { font-size: clamp(1.8rem, 2.5vw, 2.25rem); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.75rem;
+    border: 1px solid rgba(47,79,79,0.07);
+  }
+
+  .stat-card .big-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.75rem;
+    font-weight: 400;
+    color: var(--forest);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-card .stat-desc { font-size: 0.85rem; color: var(--text-mid); font-weight: 300; line-height: 1.5; }
+
+  .stat-card.accent { background: var(--forest); }
+  .stat-card.accent .big-num { color: var(--gold); }
+  .stat-card.accent .stat-desc { color: rgba(249,247,242,0.65); }
+
+  /* ── CTA SECTION ── */
+  #cta {
+    padding: 5rem 5%;
+    background: var(--cream);
+  }
+
+  .cta-box {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--forest);
+    border-radius: 28px;
+    padding: 4rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(212,180,131,0.08);
+    top: -150px; right: -100px;
+  }
+
+  .cta-box::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(200,213,200,0.06);
+    bottom: -100px; left: -80px;
+  }
+
+  .cta-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+
+  .cta-box h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--cream);
+    margin-bottom: 0.75rem;
+    position: relative; z-index: 1;
+  }
+
+  .cta-box p {
+    font-size: 1rem;
+    color: rgba(249,247,242,0.65);
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    position: relative; z-index: 1;
+  }
+
+  .cta-form {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative; z-index: 1;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cta-input {
+    flex: 1;
+    min-width: 220px;
+    background: rgba(249,247,242,0.12);
+    border: 1px solid rgba(249,247,242,0.2);
+    border-radius: 60px;
+    padding: 0.75rem 1.4rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--cream);
+    outline: none;
+    transition: border 0.2s;
+  }
+
+  .cta-input::placeholder { color: rgba(249,247,242,0.4); }
+  .cta-input:focus { border-color: var(--gold); }
+
+  /* ── VALUES ── */
+  #values {
+    padding: 6rem 5%;
+    background: #f3f1eb;
+  }
+
+  .values-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  .values-header { text-align: center; margin-bottom: 3.5rem; }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .value-card {
+    text-align: center;
+    padding: 2.25rem 1.5rem;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid rgba(47,79,79,0.07);
+    transition: transform 0.3s;
+  }
+
+  .value-card:hover { transform: translateY(-4px); }
+
+  .value-icon { font-size: 2.25rem; margin-bottom: 1rem; }
+  .value-card h3 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.5rem; }
+  .value-card p { font-size: 0.83rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--forest);
+    padding: 4rem 5% 2.5rem;
+    color: rgba(249,247,242,0.65);
+  }
+
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(249,247,242,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .footer-brand .logo-text { color: var(--cream); margin-bottom: 0.75rem; display: block; }
+  .footer-brand p { font-size: 0.82rem; line-height: 1.7; max-width: 260px; }
+
+  .footer-social { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .social-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    border: 1px solid rgba(249,247,242,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    color: rgba(249,247,242,0.65);
+  }
+  .social-icon:hover { background: rgba(249,247,242,0.1); border-color: rgba(249,247,242,0.3); }
+
+  .footer-col h5 { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; color: var(--cream); letter-spacing: 0.05em; margin-bottom: 1.25rem; text-transform: uppercase; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-col ul li a { text-decoration: none; color: rgba(249,247,242,0.55); font-size: 0.85rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--cream); }
+
+  .footer-newsletter input {
+    width: 100%;
+    background: rgba(249,247,242,0.08);
+    border: 1px solid rgba(249,247,242,0.15);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--cream);
+    outline: none;
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-newsletter input::placeholder { color: rgba(249,247,242,0.35); }
+
+  .footer-bottom {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+  }
+
+  .footer-bottom p { color: rgba(249,247,242,0.35); }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-up-d1 { transition-delay: 0.1s; }
+  .fade-up-d2 { transition-delay: 0.2s; }
+  .fade-up-d3 { transition-delay: 0.3s; }
+  .fade-up-d4 { transition-delay: 0.4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+    .persona-scroll { grid-template-columns: repeat(2, 1fr); }
+    .persona-scroll-2 { grid-template-columns: repeat(2, 1fr); }
+    .values-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    /* Nav */
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    nav .btn-primary { display: none; }
+
+    /* Hero */
+    #hero { grid-template-columns: 1fr; padding-top: 6.5rem; padding-bottom: 3rem; gap: 0; }
+    .hero-right { display: none; }
+    .hero-left h1 { font-size: 2.4rem; }
+    .hero-sub { font-size: 0.95rem; max-width: 100%; }
+    .hero-ctas { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .hero-ctas .btn-primary, .hero-ctas .btn-outline { width: 100%; text-align: center; justify-content: center; }
+
+    /* Problem */
+    #problem { padding: 4rem 5%; }
+    .problem-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .problem-quote { font-size: 1.25rem; }
+
+    /* Pillars */
+    #pillars { padding: 4rem 5%; }
+    .pillars-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* How it works steps */
+    .steps-row { flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+    .step-connector { display: none; }
+    .step { width: 140px; }
+
+    /* Personas */
+    #personas { padding: 4rem 5%; }
+    .personas-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .personas-header p { text-align: left; }
+    .persona-scroll { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .persona-scroll-2 { grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Compass */
+    #compass { padding: 4rem 5%; }
+    .compass-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+
+    /* Mission */
+    #mission { padding: 4rem 5%; }
+    .mission-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .pullout-stat { right: 0; top: auto; bottom: -1rem; }
+
+    /* Emotional */
+    #emotional { padding: 4rem 5%; }
+    .emotional-grid { grid-template-columns: 1fr; }
+    .emotional-card.wide { flex-direction: column; grid-column: span 1; }
+    .emotional-card.tall { grid-row: auto; }
+
+    /* Market */
+    #market { padding: 4rem 5%; }
+    .market-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Values */
+    #values { padding: 4rem 5%; }
+    .values-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* CTA */
+    .cta-box { padding: 3rem 1.5rem; }
+    .cta-form { flex-direction: column; align-items: stretch; }
+    .cta-input { min-width: 0; }
+
+    /* Footer */
+    .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.25rem; text-align: center; }
+    .footer-social { margin-top: 1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .pillars-grid { grid-template-columns: 1fr; }
+    .persona-scroll { grid-template-columns: 1fr; }
+    .persona-scroll-2 { grid-template-columns: 1fr; }
+    .values-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .hero-left h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ───── MOBILE MENU OVERLAY ───── -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul class="mobile-menu-links">
+    <li><a href="#how" onclick="closeMobileMenu()">How It Works</a></li>
+    <li><a href="#compass" onclick="closeMobileMenu()">Features</a></li>
+    <li><a href="#mission" onclick="closeMobileMenu()">Our Mission</a></li>
+    <li><a href="#personas" onclick="closeMobileMenu()">Who It's For</a></li>
+    <li><a href="#cta" onclick="closeMobileMenu()">Contact</a></li>
+  </ul>
+  <div class="mobile-menu-divider"></div>
+  <a href="#cta" class="btn-primary" onclick="closeMobileMenu()">Join Waitlist</a>
+</div>
+
+<!-- ───── NAV ───── -->
+<nav id="mainNav">
+  <a class="nav-logo" href="#">
+    <div class="logo-mark">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="ew-lp-nav"><circle cx="100" cy="100" r="80"/></clipPath></defs>
+        <circle cx="100" cy="100" r="85" fill="none" stroke="#2F4F4F" stroke-width="11"/>
+        <path clip-path="url(#ew-lp-nav)" fill="#2F4F4F" d="M18,160 L18,148 L36,116 L50,130 L65,100 L78,118 L100,44 L122,92 L136,80 L152,106 L182,140 L182,178 L18,178 Z"/>
+        <path clip-path="url(#ew-lp-nav)" fill="#C5D4C2" d="M82,126 C76,134 70,150 76,164 C82,176 108,180 134,172 C150,165 152,153 140,147 C128,140 108,136 96,130 C90,127 84,123 82,126 Z"/>
+      </svg>
+    </div>
+    <span class="logo-text">EndWise</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="HowItWorks.html">How It Works</a></li>
+    <li><a href="Features.html">Features</a></li>
+    <li><a href="Mission.html">Our Mission</a></li>
+    <li><a href="Contact.html">Contact</a></li>
+  </ul>
+  <a href="#cta" class="btn-primary">Sign Up</a>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ───── HERO ───── -->
+<section id="hero">
+  <div class="hero-bg-circle"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">Guidance · Organization · Peace of Mind</div>
+    <h1>
+      Navigate loss with<br>
+      <em>clarity</em> and<br>
+      <em>compassion.</em>
+    </h1>
+    <p class="hero-sub">
+      EndWise walks grieving families through the practical side of death — step by step — so you can focus on what truly matters: honoring the people you love.
+    </p>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn-primary">Join the Waitlist</a>
+      <a href="#how" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        See How It Works
+      </a>
+    </div>
+    <div class="hero-social-proof">
+      <div class="avatars">
+        <div class="avatar">A</div>
+        <div class="avatar">M</div>
+        <div class="avatar">J</div>
+        <div class="avatar">R</div>
+      </div>
+      <div class="social-text">
+        <div class="stars">★★★★★</div>
+        <p>Trusted by families across the country</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Floating pills -->
+    <div class="floating-pill pill-1">
+      <div class="pill-icon">🧭</div>
+      Closure Compass Active
+    </div>
+    <div class="floating-pill pill-2">
+      <div class="pill-icon">✅</div>
+      12 of 18 tasks complete
+    </div>
+
+    <!-- Dashboard card -->
+    <div class="hero-dashboard">
+      <div class="dash-header">
+        <div class="dash-greeting">
+          <span>Good morning,</span>
+          <strong>Alex — you're not alone.</strong>
+        </div>
+        <div class="dash-avatar-sm">A</div>
+      </div>
+
+      <div class="dash-progress-card">
+        <div class="dash-progress-label">Your Progress</div>
+        <div class="dash-progress-pct">68%</div>
+        <div class="dash-progress-sub">12 of 18 tasks completed</div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+      </div>
+
+      <div class="dash-tasks-title">Next Up</div>
+
+      <div class="task-item done-task">
+        <div class="task-dot done"></div>
+        Obtain Death Certificate
+        <span class="task-due">Done</span>
+      </div>
+      <div class="task-item done-task">
+        <div class="task-dot done"></div>
+        Notify Social Security
+        <span class="task-due">Done</span>
+      </div>
+      <div class="task-item">
+        <div class="task-dot pending"></div>
+        Validate Notarized Will
+        <span class="task-due">Due soon</span>
+      </div>
+      <div class="task-item">
+        <div class="task-dot todo"></div>
+        Close Bank Accounts
+        <span class="task-due">In 7 days</span>
+      </div>
+      <div class="task-item">
+        <div class="task-dot todo"></div>
+        Upload Power of Attorney
+        <span class="task-due">Pending</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── THE PROBLEM ───── -->
+<section id="problem">
+  <div class="problem-inner">
+    <div class="problem-left fade-up">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">Grief doesn't come with a checklist.<br>But paperwork does.</h2>
+      <p class="section-body">
+        When someone dies, their loved ones are expected to navigate a maze of legal, financial, and emotional demands — all at once, without a guide. Millions suffer not just because of the loss itself, but because they don't know what to do next.
+      </p>
+      <div class="problem-quote">
+        "Loss is inevitable.<br>Confusion shouldn't be."
+      </div>
+    </div>
+
+    <div class="problem-right">
+      <div class="pain-card fade-up fade-up-d1">
+        <div class="pain-icon">📜</div>
+        <div>
+          <h4>Legal & Financial Maze</h4>
+          <p>Wills, bank accounts, death certificates, and benefit claims — each with their own forms, deadlines, and state-specific rules.</p>
+        </div>
+      </div>
+      <div class="pain-card fade-up fade-up-d2">
+        <div class="pain-icon">🌫️</div>
+        <div>
+          <h4>Emotional Overwhelm</h4>
+          <p>Grief creates mental fog. Making critical decisions while mourning is one of the hardest things a person can face.</p>
+        </div>
+      </div>
+      <div class="pain-card fade-up fade-up-d3">
+        <div class="pain-icon">🗺️</div>
+        <div>
+          <h4>No Clear Path Forward</h4>
+          <p>Disjointed systems that vary by state, family structure, and circumstance leave families without a single, trusted guide.</p>
+        </div>
+      </div>
+      <div class="pain-card fade-up fade-up-d4">
+        <div class="pain-icon">⏳</div>
+        <div>
+          <h4>Time-Sensitive Consequences</h4>
+          <p>Miss a deadline and lose an entitlement. Act too slowly and face legal complications that compound an already painful season.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── PILLARS ───── -->
+<section id="pillars">
+  <div class="pillars-header fade-up">
+    <div class="section-label">Why EndWise</div>
+    <h2 class="section-title">Built with dignity at the core</h2>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar-card fade-up fade-up-d1">
+      <div class="pillar-icon-wrap teal">🔒</div>
+      <h3>Secure & Private</h3>
+      <p>Your documents and data are encrypted with enterprise-grade security. Your family's information stays yours.</p>
+    </div>
+    <div class="pillar-card fade-up fade-up-d2">
+      <div class="pillar-icon-wrap gold">🧭</div>
+      <h3>Guided Step-by-Step</h3>
+      <p>We break complex processes into clear, manageable tasks so you always know exactly what comes next.</p>
+    </div>
+    <div class="pillar-card fade-up fade-up-d3">
+      <div class="pillar-icon-wrap sage">👨‍👩‍👧</div>
+      <h3>Built for Families</h3>
+      <p>Share access with trusted family members or executors. Collaborate together on the hardest moments.</p>
+    </div>
+    <div class="pillar-card fade-up fade-up-d4">
+      <div class="pillar-icon-wrap green">🕊️</div>
+      <h3>Peace of Mind</h3>
+      <p>Everything in one safe, organized place. Less searching. Less stress. More space to grieve and heal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───── HOW IT WORKS ───── -->
+<section id="how">
+  <div class="container">
+    <div class="how-header fade-up">
+      <div class="section-label">It's Simple</div>
+      <h2 class="section-title">How EndWise Works</h2>
+      <p style="color: var(--text-mid); font-weight:300; margin-top:0.5rem;">From your first question to your last task — we're with you every step.</p>
+    </div>
+
+    <div class="steps-row">
+      <div class="step fade-up fade-up-d1">
+        <div class="step-num-wrap">
+          <span class="step-icon">👤</span>
+          <span class="step-num">1</span>
+        </div>
+        <h4>Tell Us Your Story</h4>
+        <p>Answer a few gentle questions about your situation, state, and loved one.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step fade-up fade-up-d2">
+        <div class="step-num-wrap">
+          <span class="step-icon">🗺️</span>
+          <span class="step-num">2</span>
+        </div>
+        <h4>Get Your Roadmap</h4>
+        <p>We build a personalized action plan — legal, financial, emotional — just for you.</p>
+      </div>
+      <div class="step-connector rev"></div>
+      <div class="step fade-up fade-up-d3">
+        <div class="step-num-wrap">
+          <span class="step-icon">📁</span>
+          <span class="step-num">3</span>
+        </div>
+        <h4>Upload & Organize</h4>
+        <p>Store documents safely in your encrypted vault — wills, certificates, titles, and more.</p>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step fade-up fade-up-d4">
+        <div class="step-num-wrap">
+          <span class="step-icon">✅</span>
+          <span class="step-num">4</span>
+        </div>
+        <h4>Follow & Complete</h4>
+        <p>Work through guided tasks at your own pace, with context and contacts provided.</p>
+      </div>
+      <div class="step-connector rev"></div>
+      <div class="step fade-up" style="transition-delay:0.5s">
+        <div class="step-num-wrap">
+          <span class="step-icon">🕊️</span>
+          <span class="step-num">5</span>
+        </div>
+        <h4>Stay Confident</h4>
+        <p>Track progress, revisit resources, and find support whenever you need it.</p>
+      </div>
+    </div>
+
+    <div class="how-cta fade-up">
+      <a href="#cta" class="btn-primary">Get Your Roadmap</a>
+    </div>
+  </div>
+</section>
+
+<!-- ───── WHO IT'S FOR ───── -->
+<section id="personas">
+  <div class="container">
+    <div class="personas-header">
+      <div>
+        <div class="section-label fade-up">Who It's For</div>
+        <h2 class="section-title fade-up">Every family's journey is different.<br>EndWise meets you where you are.</h2>
+      </div>
+      <p class="section-body fade-up" style="font-size:0.9rem; max-width:320px; text-align:right;">Whether you're grieving, planning ahead, or supporting someone else — there's a path built for you.</p>
+    </div>
+
+    <div class="persona-scroll">
+      <div class="persona-card fade-up fade-up-d1">
+        <div class="persona-emoji">💔</div>
+        <h4>Grieving Son or Daughter</h4>
+        <p>You just lost a parent and don't know where to start. We create your personalized checklist and walk with you from day one.</p>
+      </div>
+      <div class="persona-card fade-up fade-up-d2">
+        <div class="persona-emoji">💍</div>
+        <h4>Surviving Spouse</h4>
+        <p>Overwhelmed by account closures, legal documents, and final arrangements. We handle the complexity so you can focus on healing.</p>
+      </div>
+      <div class="persona-card fade-up fade-up-d3">
+        <div class="persona-emoji">📋</div>
+        <h4>Executor of Estate</h4>
+        <p>Responsible for distribution and documentation. EndWise gives you a structured, legally-aware workflow to fulfill your duty with confidence.</p>
+      </div>
+      <div class="persona-card fade-up fade-up-d4">
+        <div class="persona-emoji">🌿</div>
+        <h4>Aging Adult Planning Ahead</h4>
+        <p>Your loved ones shouldn't have to figure this out alone. Build your legacy plan now — letters, wishes, documents — all in one place.</p>
+      </div>
+    </div>
+
+    <div class="persona-scroll-2" style="margin-top:1.25rem">
+      <div class="persona-card fade-up fade-up-d1">
+        <div class="persona-emoji">👨‍👩‍👧</div>
+        <h4>Adult Child of Aging Parents</h4>
+        <p>Help your parents organize their wishes before a crisis — pre-plan together and feel prepared.</p>
+      </div>
+      <div class="persona-card fade-up fade-up-d2">
+        <div class="persona-emoji">🎖️</div>
+        <h4>Veterans & Military Families</h4>
+        <p>Access veteran-specific benefits, burial honors, and support resources through a guided, respectful process.</p>
+      </div>
+      <div class="persona-card fade-up fade-up-d3">
+        <div class="persona-emoji">🤝</div>
+        <h4>Someone Supporting Others</h4>
+        <p>A trusted friend, neighbor, or community leader helping someone navigate loss. EndWise equips you to guide them well.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── CLOSURE COMPASS ───── -->
+<section id="compass">
+  <div class="compass-inner">
+    <div class="compass-left">
+      <div class="section-label fade-up">The Closure Compass™</div>
+      <h2 class="section-title fade-up">Your personalized guide<br>through every task.</h2>
+      <p class="section-body fade-up" style="color:rgba(249,247,242,0.65)">
+        Built around your unique situation — location, relationship, estate status, and cultural background — the Closure Compass organizes every task into clear categories with timeframes, contacts, and guidance.
+      </p>
+      <div class="compass-features fade-up">
+        <div class="cf-item"><div class="cf-check">✓</div>Legal: Wills, death certificates, SSA notifications</div>
+        <div class="cf-item"><div class="cf-check">✓</div>Financial: Bank accounts, cards, benefit claims</div>
+        <div class="cf-item"><div class="cf-check">✓</div>Funeral & Memorial: Obituary, service, invitations</div>
+        <div class="cf-item"><div class="cf-check">✓</div>Emotional: Grief resources, journal prompts, support</div>
+        <div class="cf-item"><div class="cf-check">✓</div>Document Vault: Secure upload, templates, sharing</div>
+      </div>
+    </div>
+
+    <div class="compass-right fade-up">
+      <div class="compass-card-ui">
+        <div class="cc-header">
+          <div class="cc-cat"><div class="cc-cat-icon" style="background:rgba(212,180,131,0.2)">⚖️</div>Legal Tasks</div>
+          <div class="cc-badge">3 pending</div>
+        </div>
+        <div class="cc-task"><div class="cc-check-box done">✓</div>Obtain certified death certificate</div>
+        <div class="cc-task"><div class="cc-check-box done">✓</div>Notify Social Security Administration</div>
+        <div class="cc-task"><div class="cc-check-box"></div>Validate notarized will with probate court</div>
+        <div class="cc-task"><div class="cc-check-box"></div>Notify life insurance providers</div>
+      </div>
+      <div class="compass-card-ui">
+        <div class="cc-header">
+          <div class="cc-cat"><div class="cc-cat-icon" style="background:rgba(200,213,200,0.2)">💰</div>Financial Tasks</div>
+          <div class="cc-badge">2 pending</div>
+        </div>
+        <div class="cc-task"><div class="cc-check-box done">✓</div>Notify primary bank of passing</div>
+        <div class="cc-task"><div class="cc-check-box"></div>Close or transfer joint credit cards</div>
+        <div class="cc-task"><div class="cc-check-box"></div>Claim survivor pension benefits</div>
+      </div>
+      <div class="compass-card-ui">
+        <div class="cc-header">
+          <div class="cc-cat"><div class="cc-cat-icon" style="background:rgba(249,247,242,0.1)">🕊️</div>Emotional Care</div>
+          <div class="cc-badge">ongoing</div>
+        </div>
+        <div class="cc-task"><div class="cc-check-box done">✓</div>Connect with a grief counselor</div>
+        <div class="cc-task"><div class="cc-check-box"></div>Write a memory entry on the Memory Wall</div>
+        <div class="cc-task"><div class="cc-check-box"></div>Today's Peace Note awaits you</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── FOUNDER MISSION ───── -->
+<section id="mission">
+  <div class="mission-inner">
+    <div class="mission-image-wrap fade-up">
+      <div class="mission-image-bg">
+        <div class="mission-image-inner"></div>
+        <div class="mission-image-scene">
+          <!-- Family silhouette SVG -->
+          <svg class="scene-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <ellipse cx="200" cy="290" rx="190" ry="20" opacity="0.3"/>
+            <!-- Trees -->
+            <path d="M50 200 L70 120 L90 200z" opacity="0.6"/>
+            <path d="M60 220 L70 160 L80 220z" opacity="0.4"/>
+            <path d="M300 200 L320 110 L340 200z" opacity="0.6"/>
+            <path d="M310 220 L320 150 L330 220z" opacity="0.4"/>
+            <!-- Adult figures -->
+            <circle cx="175" cy="160" r="18"/>
+            <path d="M157 178 Q175 220 193 178z"/>
+            <circle cx="225" cy="165" r="16"/>
+            <path d="M209 181 Q225 220 241 181z"/>
+            <!-- Child figure -->
+            <circle cx="200" cy="190" r="12"/>
+            <path d="M188 202 Q200 230 212 202z"/>
+            <!-- Sun/light -->
+            <circle cx="200" cy="60" r="30" opacity="0.4"/>
+            <path d="M200 20 L200 10M200 110 L200 100M240 60 L250 60M160 60 L150 60M228 32 L235 25M172 88 L165 95M228 88 L235 95M172 32 L165 25" stroke="white" stroke-width="3" fill="none" opacity="0.3"/>
+          </svg>
+        </div>
+        <div class="mission-caption">
+          <p>"EndWise helped us stay organized and focused when we needed it most."</p>
+          <cite>— Sarah M., EndWise Community</cite>
+        </div>
+      </div>
+
+      <div class="pullout-stat">
+        <div class="stat-num">~3M</div>
+        <div class="stat-label">U.S. deaths every year</div>
+      </div>
+    </div>
+
+    <div class="mission-right">
+      <div class="section-label fade-up">Our Why</div>
+      <h2 class="section-title fade-up">Born from the gap between death and dignity.</h2>
+
+      <p class="mission-body fade-up">
+        In October 2021, our founder lost her mother to cancer — misdiagnosed as a muscle sprain. Eleven months later, her father passed from a triple stroke. Grief didn't stop the systems from demanding action.
+      </p>
+      <p class="mission-body fade-up">
+        She didn't know where to start. Didn't know what papers mattered. Didn't know what rights she had. Years later, she's still fighting to validate a notarized will. This company was born from that valley.
+      </p>
+
+      <div class="founder-values fade-up">
+        <div class="fv-item"><div class="fv-dot"></div><span><strong>EndWise is not just a tech solution.</strong> It's a revolution of care, clarity, and closure.</span></div>
+        <div class="fv-item"><div class="fv-dot"></div><span>We make personalized action plans based on your location, relationship, and estate status.</span></div>
+        <div class="fv-item"><div class="fv-dot"></div><span>We offer emotional guidance and cultural sensitivity — because grief is human, not transactional.</span></div>
+      </div>
+
+      <a href="#cta" class="btn-gold fade-up" style="margin-top:0.5rem">Learn More About Our Mission</a>
+    </div>
+  </div>
+</section>
+
+<!-- ───── EMOTIONAL UX ───── -->
+<section id="emotional">
+  <div class="emotional-inner">
+    <div class="emotional-header fade-up">
+      <div class="section-label">More Than Tasks</div>
+      <h2 class="section-title">The Encouragement Space</h2>
+      <p style="color:var(--text-mid); font-weight:300; margin-top:0.5rem; max-width:540px; margin-left:auto; margin-right:auto;">
+        EndWise isn't just a to-do list. It's a companion that meets you in the grief — with gentleness, memory, and heart.
+      </p>
+    </div>
+
+    <div class="emotional-grid">
+      <div class="emotional-card wide fade-up">
+        <div>
+          <div class="ec-icon">🕯️</div>
+          <h3>Memory Wall</h3>
+          <p>Upload photos, stories, and voice notes about your loved one. Preserve who they were beyond the paperwork, and share it with family near and far.</p>
+        </div>
+        <div style="flex-shrink:0; background:var(--sage); border-radius:14px; width:120px; height:120px; display:flex; align-items:center; justify-content:center; font-size:3rem; opacity:0.7;">🌸</div>
+      </div>
+
+      <div class="emotional-card tall fade-up fade-up-d1">
+        <div class="ec-icon">📔</div>
+        <h3>Grief Journal Prompts</h3>
+        <p>Guided prompts to help you process, reflect, and remember. Write privately, or share with your care circle.</p>
+        <div class="peace-note" style="margin-top:1.5rem">
+          <p>"You've done enough today. It's okay to pause. The tasks will still be here tomorrow."</p>
+          <cite>— EndWise Daily Reminder</cite>
+        </div>
+      </div>
+
+      <div class="emotional-card fade-up fade-up-d2">
+        <div class="ec-icon">🤝</div>
+        <h3>Expert Marketplace</h3>
+        <p>Connect with grief counselors, estate attorneys, end-of-life doulas, and funeral partners — all vetted and compassionate.</p>
+      </div>
+
+      <div class="emotional-card fade-up fade-up-d3">
+        <div class="ec-icon">🌙</div>
+        <h3>Daily Peace Notes</h3>
+        <p>Start each day with a faith-agnostic, culturally sensitive word of wisdom or affirmation to carry you through.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── MARKET OPPORTUNITY ───── -->
+<section id="market">
+  <div class="market-inner">
+    <div class="market-left fade-up">
+      <div class="section-label">The Opportunity</div>
+      <h2 class="section-title">This isn't a niche.<br>It's a universal need.</h2>
+      <p class="section-body" style="margin-top:1rem; font-size:0.9rem;">
+        Every family will face this moment. EndWise sits at the untapped intersection of end-of-life planning, fintech, and compassionate mental health support.
+      </p>
+    </div>
+    <div class="stats-grid fade-up">
+      <div class="stat-card">
+        <div class="big-num">3M+</div>
+        <div class="stat-desc">U.S. deaths annually — each leaving behind a family that needs guidance</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="big-num">$180B+</div>
+        <div class="stat-desc">Estate planning market — largely underserved by modern technology</div>
+      </div>
+      <div class="stat-card accent" style="background:var(--sage); border:none;">
+        <div class="big-num" style="color:var(--forest)">$25B</div>
+        <div class="stat-desc" style="color:var(--text-mid)">Funeral & death care industry ripe for dignified disruption</div>
+      </div>
+      <div class="stat-card">
+        <div class="big-num">∞</div>
+        <div class="stat-desc">The human need for clarity and compassion in loss — timeless and universal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── VALUES ───── -->
+<section id="values">
+  <div class="values-inner">
+    <div class="values-header fade-up">
+      <div class="section-label">Our Core Values</div>
+      <h2 class="section-title">We lead with heart, not just checklists.</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card fade-up fade-up-d1">
+        <div class="value-icon">🕊️</div>
+        <h3>Dignity</h3>
+        <p>Every person deserves to be cared for, even — and especially — in death. We build every feature with that truth at the center.</p>
+      </div>
+      <div class="value-card fade-up fade-up-d2">
+        <div class="value-icon">💡</div>
+        <h3>Clarity</h3>
+        <p>We make the invisible steps visible. No jargon, no overwhelm — just clear, human guidance through the hardest moments.</p>
+      </div>
+      <div class="value-card fade-up fade-up-d3">
+        <div class="value-icon">🌍</div>
+        <h3>Equity</h3>
+        <p>We empower all families, regardless of wealth, background, or circumstance. Grief and logistics don't discriminate — neither do we.</p>
+      </div>
+      <div class="value-card fade-up fade-up-d4">
+        <div class="value-icon">❤️</div>
+        <h3>Compassion</h3>
+        <p>Technology built on empathy. Every interaction is designed to feel human, warm, and supportive — not clinical or cold.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── CTA ───── -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-box fade-up">
+      <div class="cta-label">Be the First</div>
+      <h2>Be the first to experience EndWise.</h2>
+      <p>Join our waitlist and get early access. Help us build the guide that families deserve.</p>
+      <div class="cta-form">
+        <input class="cta-input" type="email" placeholder="Enter your email address" />
+        <a href="#" class="btn-gold" >Sign Up</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── FOOTER ───── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
+        <div class="logo-mark"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="ew-lp-ft"><circle cx="100" cy="100" r="80"/></clipPath></defs><circle cx="100" cy="100" r="85" fill="none" stroke="#C5D4C2" stroke-width="11"/><path clip-path="url(#ew-lp-ft)" fill="#C5D4C2" d="M18,160 L18,148 L36,116 L50,130 L65,100 L78,118 L100,44 L122,92 L136,80 L152,106 L182,140 L182,178 L18,178 Z"/><path clip-path="url(#ew-lp-ft)" fill="rgba(249,247,242,0.55)" d="M82,126 C76,134 70,150 76,164 C82,176 108,180 134,172 C150,165 152,153 140,147 C128,140 108,136 96,130 C90,127 84,123 82,126 Z"/></svg></div>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--cream)">EndWise</span>
+      </div>
+      <p>A guided life management platform for life's most important transitions. Built with dignity, clarity, and compassion.</p>
+      <div class="footer-social">
+        <div class="social-icon">f</div>
+        <div class="social-icon">in</div>
+        <div class="social-icon">ig</div>
+        <div class="social-icon">✉</div>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#compass">Features</a></li>
+        <li><a href="#mission">Our Mission</a></li>
+        <li><a href="#personas">Who It's For</a></li>
+        <li><a href="#cta">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Legal</h5>
+      <ul>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col footer-newsletter">
+      <h5>Stay Connected</h5>
+      <p style="font-size:0.82rem;margin-bottom:1rem;">Join our waitlist for updates, resources, and early access to EndWise.</p>
+      <input type="email" placeholder="Enter your email" />
+      <a href="#" class="btn-gold" style="width:100%;text-align:center;display:block;">Subscribe →</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2024 EndWise. All rights reserved.</p>
+    <p>Made with compassion, for every family.</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Nav shrink on scroll
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.style.padding = '0.75rem 5%';
+      nav.style.boxShadow = '0 4px 24px rgba(47,79,79,0.08)';
+    } else {
+      nav.style.padding = '1.1rem 5%';
+      nav.style.boxShadow = 'none';
+    }
+  }, { passive: true });
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  function openMobileMenu() {
+    hamburger.classList.add('open');
+    mobileMenu.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileMenu(); });
+</script>
+</body>
+</html>
