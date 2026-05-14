@@ -1330,6 +1330,11 @@
     #values { padding: 4rem 5%; }
     .values-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
 
+     /* Waitlist */
+  .wl-card{padding:3rem 1.5rem}
+  .wl-form{flex-direction:column;align-items:stretch}
+  .wl-input{min-width:0}
+
     /* CTA */
     .cta-box { padding: 3rem 1.5rem; }
     .cta-form { flex-direction: column; align-items: stretch; }
@@ -1349,6 +1354,25 @@
     .stats-grid { grid-template-columns: 1fr; }
     .hero-left h1 { font-size: 2rem; }
   }
+
+  /* ══════════ WAITLIST ══════════ */
+#waitlist{background:var(--cream);padding:7rem 5%}
+.wl-card{
+  max-width:820px;margin:0 auto;text-align:center;
+  background:var(--forest);border-radius:28px;padding:4.5rem 3rem;
+  position:relative;overflow:hidden;
+}
+.wl-card::before{content:'';position:absolute;width:480px;height:480px;border-radius:50%;background:rgba(212,180,131,.07);top:-200px;right:-100px;pointer-events:none}
+.wl-card::after{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:rgba(200,213,200,.05);bottom:-130px;left:-80px;pointer-events:none}
+.wl-icon{width:52px;height:52px;border-radius:15px;background:rgba(212,180,131,.12);border:1px solid rgba(212,180,131,.22);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin:0 auto 1.5rem;position:relative;z-index:1}
+.wl-card h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,3.2vw,2.7rem);color:var(--cream);margin-bottom:.7rem;position:relative;z-index:1}
+.wl-card p{font-size:.94rem;color:var(--cream-60);max-width:460px;margin:0 auto 2.4rem;line-height:1.8;font-weight:300;position:relative;z-index:1}
+.wl-form{display:flex;gap:.7rem;max-width:440px;margin:0 auto;position:relative;z-index:1;flex-wrap:wrap;justify-content:center}
+.wl-input{flex:1;min-width:210px;background:rgba(249,247,242,.1);border:1px solid rgba(249,247,242,.17);border-radius:60px;padding:.78rem 1.35rem;font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--cream);outline:none;transition:border .2s}
+.wl-input::placeholder{color:rgba(249,247,242,.35)}
+.wl-input:focus{border-color:var(--gold)}
+.btn-gold{background:var(--gold);color:var(--forest);border:none;border-radius:60px;padding:.72rem 1.5rem;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .25s,transform .2s;text-decoration:none;display:inline-block}
+.btn-gold:hover{background:var(--gold-dk);color:#fff;transform:translateY(-1px)}
 </style>
 </head>
 <body>
@@ -1906,7 +1930,7 @@
   <div class="wl-card fade-up">
     <div class="wl-icon">✉️</div>
     <h2>Join our Waitlist</h2>
-    <p>EndWise helps families navigate what comes next and helps individuals plan ahead with clarity and care. Whether you're planning ahead or supporting someone through loss, EndWise meets you there.</p>
+    <p style="color: #F9F7F2;">EndWise helps families navigate what comes next and helps individuals plan ahead with clarity and care. Whether you're planning ahead or supporting someone through loss, EndWise meets you there.</p>
     <div class="wl-form">
       <input class="wl-input" type="email" placeholder="Your email address"/>
       <button class="btn-gold" onclick="this.textContent='You\'re on the list ✓';this.style.background='#3d6464';this.style.color='#f9f7f2'">Get Early Access</button>
